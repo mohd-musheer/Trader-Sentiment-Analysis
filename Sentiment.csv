@@ -1,4 +1,4 @@
-timestamp,value,classification,date
+timestamp,value,classification,date 
 1517463000,30,Fear,2018-02-01
 1517549400,15,Extreme Fear,2018-02-02
 1517635800,40,Fear,2018-02-03
