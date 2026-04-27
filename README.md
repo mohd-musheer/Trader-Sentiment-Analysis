@@ -7,10 +7,6 @@ Analyze the relationship between market sentiment (Fear vs Greed) and trader per
 - `sentiment.csv` or `fear_greed_index.csv`: daily Bitcoin market sentiment with date and classification.
 - `trader_data.csv` or `historical_data.csv`: trader-level execution data with fields such as account, symbol, execution price, size, side, closedPnL, and time.
 
-
-
-
-
 ## Files
 - `analysis.ipynb`: main analysis notebook
 - `README.md`: project overview and run instructions
@@ -32,3 +28,7 @@ The notebook is written to work with either the filenames from the assignment pr
 - Nothing is pushed to GitHub.
 - No git commits are created.
 - The project is fully local.
+
+
+
+
