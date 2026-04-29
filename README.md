@@ -11,6 +11,9 @@ Analyze the relationship between market sentiment (Fear vs Greed) and trader per
 - `analysis.ipynb`: main analysis notebook
 - `README.md`: project overview and run instructions
 
+
+
+
 ## How to Run
 1. Open the project folder in VS Code.
 2. Open `analysis.ipynb`.
