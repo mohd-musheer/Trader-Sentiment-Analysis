@@ -6,3 +6,6 @@
 
 
 
+.gt
+/.idea
+/.pytest_cache  
