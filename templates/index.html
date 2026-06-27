@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trader Sentiment Model</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <main class="shell">
+    <section class="hero">
+      <div>
+        <p class="eyebrow">FastAPI + model.pkl</p>
+        <h1>Trade summary sentiment predictor</h1>
+        <p class="lead">
+          Load the trained model, submit daily trade aggregates, and get a sentiment prediction with probabilities.
+        </p>
+      </div>
+      <div class="hero-card">
+        <button id="refreshModel" class="secondary">Reload model</button>
+        <pre id="modelInfo" class="info-box">Loading model info...</pre>
+      </div>
+    </section>
+
+    <section class="grid">
+      <form id="predictForm" class="panel">
+        <div class="panel-head">
+          <h2>Prediction input</h2>
+          <p>Use the same feature names the model was trained on.</p>
+        </div>
+        <div id="fields" class="fields"></div>
+        <button type="submit">Run prediction</button>
+      </form>
+
+      <section class="panel result-panel">
+        <div class="panel-head">
+          <h2>Result</h2>
+          <p>Prediction response from the API.</p>
+        </div>
+        <div id="result" class="result empty">No prediction yet.</div>
+      </section>
+    </section>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
