@@ -15,9 +15,8 @@ from sklearn.preprocessing import LabelEncoder, StandardScaler
 
 
 BASE_DIR = Path(__file__).resolve().parent
-MODEL_DIR = BASE_DIR / "artifacts"
-MODEL_PATH = MODEL_DIR / "model.pkl"
-METADATA_PATH = MODEL_DIR / "model_metadata.json"
+MODEL_PATH = BASE_DIR / "model.pkl"
+METADATA_PATH = BASE_DIR / "model_metadata.json"
 
 
 @dataclass(frozen=True)
@@ -59,6 +58,8 @@ def load_datasets() -> tuple[pd.DataFrame, pd.DataFrame]:
     paths = resolve_data_paths()
     sentiment = pd.read_csv(paths.sentiment)
     trades = pd.read_csv(paths.trades)
+    sentiment.columns = sentiment.columns.str.strip()
+    trades.columns = trades.columns.str.strip()
     return sentiment, trades
 
 
@@ -68,9 +69,18 @@ def prepare_daily_training_frame() -> pd.DataFrame:
     sentiment = sentiment.copy()
     trades = trades.copy()
 
+    if "date" not in sentiment.columns and "Date" in sentiment.columns:
+        sentiment["date"] = sentiment["Date"]
+    if "Timestamp IST" in trades.columns:
+        trades["trade_datetime"] = trades["Timestamp IST"]
+    elif "Timestamp" in trades.columns:
+        trades["trade_datetime"] = trades["Timestamp"]
+    else:
+        raise DataFileError("Missing required trade timestamp column")
+
     sentiment["date"] = pd.to_datetime(sentiment["date"], errors="coerce").dt.date
-    trades["Timestamp"] = pd.to_datetime(trades["Timestamp"], errors="coerce")
-    trades["date"] = trades["Timestamp"].dt.date
+    trades["trade_datetime"] = pd.to_datetime(trades["trade_datetime"], errors="coerce", dayfirst=True)
+    trades["date"] = trades["trade_datetime"].dt.date
 
     trades = trades.dropna(subset=["date"])
     sentiment = sentiment.dropna(subset=["date"])
@@ -154,7 +164,6 @@ def train_model() -> dict[str, object]:
     accuracy = accuracy_score(y_test, predictions)
     report = classification_report(y_test, predictions, target_names=encoder.classes_, zero_division=0)
 
-    MODEL_DIR.mkdir(parents=True, exist_ok=True)
     artifact = {
         "pipeline": pipeline,
         "label_encoder": encoder,

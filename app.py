@@ -52,6 +52,11 @@ class ReloadResponse(BaseModel):
     metadata: dict[str, Any]
 
 
+class LoadResponse(BaseModel):
+    message: str
+    metadata: dict[str, Any]
+
+
 class PredictResponse(BaseModel):
     prediction: str
     confidence: float
@@ -91,6 +96,14 @@ def reload_model() -> ReloadResponse:
     MODEL_CACHE["artifact"] = None
     load_model_artifact(force_reload=True)
     return ReloadResponse(message="Model retrained and reloaded", metadata=metadata)
+
+
+@app.post("/api/load-model", response_model=LoadResponse)
+def load_model_endpoint() -> LoadResponse:
+    artifact = load_model_artifact(force_reload=True)
+    metadata = load_metadata()
+    metadata["loaded"] = artifact is not None
+    return LoadResponse(message="Model loaded successfully", metadata=metadata)
 
 
 @app.post("/api/predict", response_model=PredictResponse)
